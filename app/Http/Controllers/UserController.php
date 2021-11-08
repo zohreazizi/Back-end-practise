@@ -26,6 +26,7 @@ class UserController extends Controller
             }
             $data['password'] = bcrypt($request->password);
             $user = User::create($data);
+            //generate token
             $token = $user->createToken('NewToken')->accessToken;
             return response()->json([
                 'token' => $token,
