@@ -57,4 +57,17 @@ class UserController extends Controller
             return response()->json(['error' => 'Unauthorized']);
         }
     }
+
+    public function info()
+    {
+//        $information = 'this is just for test';
+//        $roles = User::with('roles')->get();
+        $user = auth('api')->user();
+
+$role = $user->roles()->pluck('name');
+
+
+
+        return response()->json(['info' => 'hi']);
+    }
 }
