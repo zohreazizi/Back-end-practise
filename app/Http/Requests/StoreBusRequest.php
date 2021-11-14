@@ -10,7 +10,7 @@ class StoreBusRequest extends FormRequest
 {
     protected function failedValidation(Validator $validator)
     {
-        return response()->json();
+        return response()->json(['error type' => 'validation Error']);
     }
     /**
      * Determine if the user is authorized to make this request.
