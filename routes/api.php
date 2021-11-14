@@ -16,3 +16,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('login', 'UserController@login');
 Route::post('register', 'UserController@register');
+
+
+Route::group(['prefix' => 'panel', 'middleware' => ['auth:api']], function () {
+    Route::post('store', 'BusController@store');
+    Route::put('edit/{id}', 'BusController@edit');
+    Route::delete('delete/{id}', 'BusController@destroy');
+    Route::post('store', 'BusController@store');
+    Route::post('store/ride', 'RideController@store');
+});
