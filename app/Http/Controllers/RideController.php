@@ -27,4 +27,34 @@ class RideController extends Controller
             ]);
         }
     }
+
+    public function edit(StoreRideRequest $request, $id)
+    {
+
+        try {
+            $bus = Ride::query()->findOrFail($id);
+
+            $data = $request->only('departure_place', 'departure_date', 'departure_time',
+                'arrival_place', 'arrival_date', 'arrival_time', 'remaining_capacity', 'bus_id');
+            $validator = $request->validated();
+            $bus->departure_place = $request->departure_place;
+            $bus->departure_date = $request->departure_date;
+            $bus->departure_time = $request->departure_time;
+            $bus->arrival_place = $request->arrival_place;
+            $bus->arrival_date = $request->arrival_date;
+            $bus->arrival_time = $request->arrival_time;
+            $bus->remaining_capacity = $request->remaining_capacity;
+            $bus->bus_id = $request->bus_id;
+            $bus->save();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Updated successfully',
+            ]);
+        } catch (Throwable $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+            ]);
+        }
+    }
 }
