@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreRideRequest extends FormRequest
@@ -16,6 +17,11 @@ class StoreRideRequest extends FormRequest
         return true;
     }
 
+    protected function failedValidation(Validator $validator)
+    {
+        return response()->json(['error type' => 'validation Error']);
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -25,13 +31,14 @@ class StoreRideRequest extends FormRequest
     {
         return [
             'departure_place' => 'required',
-            'departure_date' => 'required',
+            'departure_date' => 'required|date_format:Y-m-d',
             'departure_time' => 'required',
             'arrival_place' => 'required',
-            'arrival_date' => 'required',
-            'arrival_time' => 'required',
+            'arrival_date' => 'required|after:departure_date|date_format:Y-m-d',
+            'arrival_time' => 'required|after:departure_time',
             'remaining_capacity' => 'required',
-            'bus_id' => 'required'
+            'bus_id' => 'required|integer',
+            'price' => 'required|integer'
         ];
     }
 }
