@@ -24,4 +24,5 @@ Route::group(['prefix' => 'panel', 'middleware' => ['auth:api']], function () {
     Route::delete('delete/{id}', 'BusController@destroy');
     Route::post('store', 'BusController@store');
     Route::post('store/ride', 'RideController@store');
+    Route::post('edit/ride/{id}', 'RideController@edit');
 });
