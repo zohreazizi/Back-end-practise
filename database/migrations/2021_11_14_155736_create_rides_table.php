@@ -22,6 +22,7 @@ class CreateRidesTable extends Migration
             $table->date('arrival_date');
             $table->time('arrival_time');
             $table->integer('remaining_capacity');
+            $table->integer('price');
             $table->unsignedBigInteger('bus_id');
             $table->foreign('bus_id')->references('id')->on('buses');
             $table->timestamps();
