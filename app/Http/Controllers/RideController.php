@@ -13,8 +13,7 @@ class RideController extends Controller
     {
         try {
             $data = $request->only('departure_place', 'departure_date', 'departure_time',
-                'arrival_place', 'arrival_date', 'arrival_time', 'remaining_capacity', 'bus_id');
-            $validator = $request->validated();
+                'arrival_place', 'arrival_date', 'arrival_time', 'remaining_capacity', 'bus_id', 'price');
             // if there are some error's, show them to user
             $bus = Ride::create($data);
             return response()->json([
@@ -35,8 +34,8 @@ class RideController extends Controller
             $bus = Ride::query()->findOrFail($id);
 
             $data = $request->only('departure_place', 'departure_date', 'departure_time',
-                'arrival_place', 'arrival_date', 'arrival_time', 'remaining_capacity', 'bus_id');
-            $validator = $request->validated();
+                'arrival_place', 'arrival_date', 'arrival_time', 'remaining_capacity', 'bus_id', 'price');
+
             $bus->departure_place = $request->departure_place;
             $bus->departure_date = $request->departure_date;
             $bus->departure_time = $request->departure_time;
@@ -45,6 +44,7 @@ class RideController extends Controller
             $bus->arrival_time = $request->arrival_time;
             $bus->remaining_capacity = $request->remaining_capacity;
             $bus->bus_id = $request->bus_id;
+            $bus->price = $request->price;
             $bus->save();
 
             return response()->json([
