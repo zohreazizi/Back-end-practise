@@ -2,72 +2,63 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreUserRequest;
+use Illuminate\Support\Facades\DB;
+use Throwable;
 use App\Models\User;
+use App\Traits\Responses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
-use Throwable;
+use App\Http\Requests\StoreUserRequest;
 
 class UserController extends Controller
 {
+    use Responses;
+
     public function register(StoreUserRequest $request)
     {
         try {
             $data = $request->only('name', 'email', 'password');
             $validator = $request->validated();
-
-            // if there are some error's, show them to user
-            if ($validator->fails()) {
-                return response()->json($validator->errors()->first(), 422);
-            }
             $data['password'] = bcrypt($request->password);
             $user = User::create($data);
+
+            // All new users get the default value of "costumer" for their first role
+            $user->roles()->attach(4);
+
             //generate token
             $token = $user->createToken('NewToken')->accessToken;
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Saved successfully',
-                'response' => [
-                    'token' => $token,
-                    'token_type' => 'Bearer'
-                ]
-            ]);
+            return $this->success(['token' => $token, 'token_type' => 'Bearer'],
+                'Saved successfully', 200);
         } catch (Throwable $e) {
-            return response()->json([
-                'error' => $e->getMessage()
-            ]);
+            //TODO code?
+            return $this->failure($e->getMessage(), 401);
         }
     }
 
-    public function login()
+    public function login(Request $request)
     {
-        if (Auth::attempt(['email' => request('email'), 'name' => request('name'), 'password' => request('password')])) {
-            $token = auth()->user()->createToken('NewToken')->accessToken;
-            return response()->json([
-                'status' => 'success',
-                'message' => "You're authorized",
-                'code' => 200,
-                'response' => [
-                    'token' => $token,
-                    'token_type' => 'Bearer'
-                ]
-            ]);
-        } else {
-            return response()->json(['error' => 'Unauthorized']);
+        try {
+            if (Auth::attempt(['email' => request('email'),
+                'name' => request('name'), 'password' => request('password')])) {
+                $token = auth()->user()->createToken('NewToken')->accessToken;
+                return $this->success(['token' => $token, 'token_type' => 'Bearer'], "You're in!", 200);
+            } else {
+                return $this->failure('You are not authenticated', 401);
+            }
+        } catch (Throwable $e) {
+            return $this->failure($e->getMessage(), 401);
         }
     }
 
-    public function info()
+
+    public function landingPageInfo()
     {
-//        $information = 'this is just for test';
-//        $roles = User::with('roles')->get();
-        $user = auth('api')->user();
-
-$role = $user->roles()->pluck('name');
-
-
-
-        return response()->json(['info' => 'hi']);
+        try {
+            $comments = User::query()->whereNotNull('comment')
+                ->select('comment', 'name')->pluck('comment' , 'name');
+            return $this->success($comments,'comments',200);
+        }catch (Throwable $e){
+            return $this->failure($e->getMessage(), 401);
+        }
     }
 }
