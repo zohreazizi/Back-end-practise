@@ -4,11 +4,32 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreRideRequest;
 use App\Models\Ride;
+use App\Models\User;
+use App\Traits\Responses;
 use Illuminate\Http\Request;
 use Throwable;
 
 class RideController extends Controller
 {
+    use Responses;
+
+    public function show(Request $request)
+    {
+        try {
+
+            $departure_place = $request->departure_place;
+            $departure_date = $request->departure_date;
+            $arrival_place = $request->arrival_place;
+
+            $available_rides = Ride::query()->where('departure_place', $departure_place)
+                ->where('arrival_place', $arrival_place)->where('departure_date', $departure_date)
+                ->where("remaining_capacity", ">", 0)->orderBy('departure_time', 'asc')->get();
+            return $this->success($available_rides, 'results for your search', 200);
+        } catch (Throwable $e) {
+            return $this->failure($e->getMessage(), 401);
+        }
+    }
+
     public function store(StoreRideRequest $request)
     {
         try {
