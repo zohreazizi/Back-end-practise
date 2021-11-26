@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Ride extends Model
 {
@@ -14,7 +14,17 @@ class Ride extends Model
 
     public function bus()
     {
-        return $this->belongsTo(Bus::class, 'bus_id', 'id');
+        return $this->belongsTo(Bus::class);
     }
+
+    public function reserves(){
+        return $this->hasMany(Reserve::class);
+    }
+
+    public function scopeSort($query, $param)
+    {
+        return $query->orderBy($param);
+    }
+
 
 }
