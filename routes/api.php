@@ -1,24 +1,16 @@
 <?php
 
+//header('Access-Control-Allow-Origin: *');
+//header('Access-Control-Allow-Headers: Origin, Content-Type, Authorization, X-Auth-Token');
+//header('Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS');
 
 use Illuminate\Support\Facades\Route;
-
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
 
 Route::post('login', 'UserController@login');
 Route::post('register', 'UserController@register');
 
 
-Route::group(['prefix' => 'panel', 'middleware' => ['auth:api']], function () {
+Route::group(['prefix' => 'panel', 'middleware' => 'auth:api'], function () {
     Route::post('store', 'BusController@store');
     Route::put('edit/{id}', 'BusController@edit');
     Route::delete('delete/{id}', 'BusController@destroy');
@@ -26,3 +18,11 @@ Route::group(['prefix' => 'panel', 'middleware' => ['auth:api']], function () {
     Route::post('store/ride', 'RideController@store');
     Route::post('edit/ride/{id}', 'RideController@edit');
 });
+
+Route::get('/', 'UserController@landingPageInfo');
+Route::post('rides','RideController@show');
+Route::post('ticket','ReserveController@show');
+Route::post('receipt', 'ReserveController@store');
+
+Route::get('tst','ReserveController@test');
+
