@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RideRequest;
 use App\Http\Requests\StoreRideRequest;
 use App\Models\Ride;
 use App\Models\User;
@@ -13,10 +14,9 @@ class RideController extends Controller
 {
     use Responses;
 
-    public function show(Request $request)
+    public function show(RideRequest $request)
     {
         try {
-
             $departure_place = $request->departure_place;
             $departure_date = $request->departure_date;
             $arrival_place = $request->arrival_place;
