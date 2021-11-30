@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\DeleteReservation;
 use App\Models\Bus;
 use App\Models\Reserve;
 use App\Models\Ride;
@@ -64,7 +65,8 @@ class ReserveController extends Controller
             $cost = Ride::query()->find($ride_id)->price;
             $final_cost = $passenger_no * $cost;
             $receipt = ['تعداد مسافر' => $passenger_no, 'هزینه هر بلیت' => $cost, 'مبلغ قابل پرداخت' => $final_cost];
-
+            $user = Reserve::find($reservation->id);
+            $this->dispatch((new DeleteReservation($reservation))->delay(now()->addSeconds(30)));
             return $this->success($receipt, 'saved', 200);
         } catch (Throwable $e) {
             return $this->failure($e->getMessage(), 401);
@@ -72,8 +74,8 @@ class ReserveController extends Controller
         }
     }
 
-    public function test()
-    {
+//    public function test()
+//    {
 
 //-----------------to get users with the role of company-----------------//
 //        $user = DB::table('users')
@@ -101,6 +103,6 @@ class ReserveController extends Controller
 //        return response()->json($rides);
 //----------------to get user_id----------------------------------------//
 
-        return response()->json(auth('api')->user());
-    }
+//        return response()->json(auth('api')->user());
+//    }
 }
