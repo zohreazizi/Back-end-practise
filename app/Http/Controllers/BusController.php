@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreBusRequest;
-use App\Models\Bus;
-use Illuminate\Http\Request;
 use Throwable;
+use App\Models\Bus;
+use App\Traits\Responses;
+use Illuminate\Http\Request;
+use App\Http\Requests\StoreBusRequest;
 
 class BusController extends Controller
 {
+    use Responses;
     public function store(StoreBusRequest $request)
     {
         try {
             $data = $request->only('name', 'plate_number', 'total_seats', 'company_name');
-            $validator = $request->validated();
-            // if there are some error's, show them to user
+
+            // if there are some errors, show them to user
             $bus = Bus::create($data);
             return response()->json([
                 'status' => 'success',
@@ -34,7 +36,7 @@ class BusController extends Controller
             $bus = Bus::query()->findOrFail($id);
 
             $data = $request->only('name', 'plate_number', 'total_seats', 'company_name');
-            $validator = $request->validated();
+//request for edit
             $bus->name = $request->name;
             $bus->plate_number = $request->plate_number;
             $bus->total_seats = $request->total_seats;
