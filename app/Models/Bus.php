@@ -17,6 +17,6 @@ class Bus extends Model
 
     public function rides()
     {
-        return $this->hasMany(Ride::class, 'bus_id', 'id');
+        return $this->hasMany(Ride::class);
     }
 }
