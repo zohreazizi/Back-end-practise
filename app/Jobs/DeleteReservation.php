@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Log;
 class DeleteReservation implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
     protected $reservation;
 
     /**
@@ -37,8 +38,10 @@ class DeleteReservation implements ShouldQueue
      */
     public function handle()
     {
+
         $expiredReservation = Reserve::query()->find($this->reservation->id);
         $expiredReservation->delete();
+        Log::info('reservation with id ' . $this->reservation->id . ' has been deleted');
     }
 
 }
