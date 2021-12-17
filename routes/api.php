@@ -22,7 +22,10 @@ Route::group(['prefix' => 'panel', 'middleware' => 'auth:api'], function () {
 Route::get('/', 'UserController@landingPageInfo');
 Route::post('rides','RideController@show');
 Route::post('ticket','ReserveController@show');
-Route::post('receipt', 'ReserveController@store');
+Route::post('receipt', 'ReserveController@store')->middleware('auth:api');
 
-Route::get('tst','ReserveController@test');
+Route::post('receipt/{reserve}/purchase', 'PurchaseController@purchase');
+Route::post('receipt/{reserve}/purchase/result', 'PurchaseController@result');
+
+//Route::get('test','ReserveController@test');
 
