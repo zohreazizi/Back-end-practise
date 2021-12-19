@@ -34,7 +34,7 @@ class ReserveController extends Controller
                     $all_seats[$i] = $seats[$i];
                 }
             }
-
+            //TODO message in another file (lang => info text)
             return $this->success($all_seats, 'status of all the seats in this bus', 200);
         } catch (Throwable $e) {
             return $this->failure($e->getMessage(), 401);
@@ -46,11 +46,9 @@ class ReserveController extends Controller
     {
 
         try {
-            if (auth('api')->user() == null) {
-                return $this->failure('You must login first', 401);
-            }
 
             $array = json_decode($request->getContent(), true);
+            $cost = Ride::query()->find($request->ride_id)->price;
             foreach ($array as $seats) {
                 $keys = array_keys($seats);
                 for ($x = 0; $x < count($seats); $x++) {
@@ -59,11 +57,11 @@ class ReserveController extends Controller
                     $reservation->gender = $seats[$keys[$x]];
                     $reservation->user_id = auth('api')->user()->id;
                     $reservation->ride_id = $request->ride_id;
+                    $reservation->cost = $cost * count($seats);
                     $reservation->save();
                 }
                 $passenger_no = count($seats);
             }
-            $cost = Ride::query()->find($request->ride_id)->price;
 
 
             $receipt = [
