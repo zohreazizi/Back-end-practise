@@ -18,7 +18,6 @@ class UserController extends Controller
     {
         try {
             $data = $request->only('name', 'email', 'password');
-            $validator = $request->validated();
             $data['password'] = bcrypt($request->password);
             $user = User::create($data);
 
@@ -50,10 +49,10 @@ class UserController extends Controller
         }
     }
 
-
     public function landingPageInfo()
     {
         try {
+        $user = User::query()->find(1)->roles;
             $comments = User::query()->whereNotNull('comment')
                 ->select('comment', 'name')->pluck('comment' , 'name');
             return $this->success($comments,'comments',200);

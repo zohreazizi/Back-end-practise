@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
 
@@ -14,9 +15,13 @@ class StoreUserRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
+    protected function failedValidation(Validator $validator)
+    {
+        return response()->json(['error type' => 'validation Error']);
+    }
     /**
      * Get the validation rules that apply to the request.
      *
@@ -31,19 +36,4 @@ class StoreUserRequest extends FormRequest
         ];
     }
 
-//    public function response(array $errors)
-//    {
-//        $transformed = [];
-//
-//        foreach ($errors as $field => $message) {
-//            $transformed[] = [
-//                'field' => $field,
-//                'message' => $message[0]
-//            ];
-//        }
-//
-//        return response()->json([
-//            'errors' => $transformed
-//        ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
-//    }
 }

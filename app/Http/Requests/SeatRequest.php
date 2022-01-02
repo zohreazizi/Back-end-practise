@@ -4,14 +4,9 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\ValidationException;
 
-class StoreBusRequest extends FormRequest
+class SeatRequest extends FormRequest
 {
-    protected function failedValidation(Validator $validator)
-    {
-        return response()->json(['error type' => 'validation Error']);
-    }
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -22,6 +17,18 @@ class StoreBusRequest extends FormRequest
         return true;
     }
 
+    public function messages()
+    {
+        return [
+            'id.required' => 'An id is required'
+        ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        return $this->messages();
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -29,12 +36,10 @@ class StoreBusRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'name' => 'required|unique:buses',
-            'plate_number' => 'required|unique:buses',
-            'total_seats' => 'required',
-            'company_name' => 'required'
-        ];
-    }
 
+        return [
+            'id' => 'required|int|exists:rides,id',
+        ];
+
+    }
 }

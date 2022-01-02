@@ -17,7 +17,8 @@ class CreateReservesTable extends Migration
             $table->id();
             $table->string('gender');
             $table->integer('seat_no');
-
+            $table->boolean('is_paid')->default(0);
+            $table->integer('cost');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedBigInteger('ride_id');
