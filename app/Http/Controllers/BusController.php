@@ -16,7 +16,6 @@ class BusController extends Controller
         try {
             $data = $request->only('name', 'plate_number', 'total_seats', 'company_name');
 
-            // if there are some errors, show them to user
             $bus = Bus::create($data);
             return response()->json([
                 'status' => 'success',
