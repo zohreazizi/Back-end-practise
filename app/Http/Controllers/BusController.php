@@ -35,7 +35,7 @@ class BusController extends Controller
             $bus = Bus::query()->findOrFail($id);
 
             $data = $request->only('name', 'plate_number', 'total_seats', 'company_name');
-//request for edit
+            //request for edit
             $bus->name = $request->name;
             $bus->plate_number = $request->plate_number;
             $bus->total_seats = $request->total_seats;
