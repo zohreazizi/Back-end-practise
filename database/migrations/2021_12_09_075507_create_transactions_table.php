@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\traSchema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 class CreateTransactionsTable extends Migration
@@ -15,6 +15,7 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
+        
             $table->char('payment_id', 32)->index();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('reserve_id');
