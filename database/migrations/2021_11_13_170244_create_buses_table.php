@@ -20,6 +20,7 @@ class CreateBusesTable extends Migration
             $table->string('plate_number');
             $table->string('company_name');
             $table->integer('total_seats');
+            // to archive vehicles
             $table->softDeletes();
         });
     }
