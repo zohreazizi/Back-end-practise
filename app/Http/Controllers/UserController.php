@@ -21,7 +21,7 @@ class UserController extends Controller
             $data['password'] = bcrypt($request->password);
             $user = User::create($data);
 
-            // All new users get the default value of "costumer" for their first role
+            // all new users get the default value of "costumer" for their first role
             $user->roles()->attach(4);
 
             //generate token
